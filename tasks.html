@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks - Task Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header></header>
+    <main>
+        <div class="container">
+            <h1>Manage Your Tasks</h1>
+            <form id="task-form">
+                <div class="form-group">
+                    <label for="task-title">Title:</label>
+                    <input type="text" id="task-title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="task-description">Description:</label>
+                    <textarea id="task-description" name="description" required></textarea>
+                </div>
+                <button type="submit">Add Task</button>
+            </form>
+            <div id="task-controls">
+                <input type="text" id="search-input" placeholder="Search tasks...">
+                <select id="sort-select">
+                    <option value="">Sort by</option>
+                    <option value="completed">Completed</option>
+                    <option value="notCompleted">Not Completed</option>
+                </select>
+            </div>
+            <div id="tasks-container">
+                <h2>Tasks</h2>
+                <div id="tasks-list"></div>
+                <div id="loading">Loading tasks...</div>
+                <div id="error" class="error"></div>
+            </div>
+        </div>
+    </main>
+    <script src="include-header.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
