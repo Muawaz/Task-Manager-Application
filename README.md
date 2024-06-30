@@ -1,5 +1,6 @@
 # Task-Manager-Application
 The Task Manager Application is a web-based tool designed to help users manage their tasks efficiently. It allows users to add, edit, delete, search, and sort tasks dynamically. This application interacts with a mock REST API (JSONPlaceholder) for task data management.
+(https://muawaz.github.io/Task-Manager-Application/)
 
 ### Features
 - **Task CRUD Operations:** Add new tasks, edit existing tasks, mark tasks as completed or not completed, and delete tasks.
