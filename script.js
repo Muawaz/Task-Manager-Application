@@ -33,11 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3>${task.title}</h3>
                 <p>${task.description || ''}</p>
                 <label>
-                    <span class="task-status">${task.completed ? 'Completed' : 'Not Completed'}
+                    <span class="task-status">${task.completed ? 'Completed' : 'Not Completed'}</span>
                     <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="updateTaskStatus(${task.id}, this.checked)">
-                    </span>
                 </label>
-                
                 <div class="task-actions">
                     <button onclick="editTask(${task.id})">Edit</button>
                     <button onclick="deleteTask(${task.id})">Delete</button>
@@ -88,6 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.updateTaskStatus = async (id, completed) => {
         try {
+            const task = tasks.find(t => t.id === id);
+            if (!task) throw new Error('Task not found');
+    
             const response = await fetch(`${API_URL}/${id}`, {
                 method: 'PATCH',
                 headers: {
@@ -97,10 +98,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     completed
                 })
             });
+    
             if (!response.ok) throw new Error('Failed to update task status');
+    
             const updatedTask = await response.json();
+            const updatedTaskWithOldProps = { ...task, completed: updatedTask.completed };
+    
             const index = tasks.findIndex(t => t.id === id);
-            tasks[index] = updatedTask;
+            tasks[index] = updatedTaskWithOldProps;
             displayTasks(tasks);
         } catch (error) {
             showError(error.message);
@@ -140,13 +145,15 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const sortTasks = (tasksToSort, criteria) => {
+        let sortedTasks;
         if (criteria === 'completed') {
-            return tasksToSort.sort((a, b) => a.completed - b.completed);
+            sortedTasks = tasksToSort.filter(task => task.completed).sort((a, b) => a.completed - b.completed);
         } else if (criteria === 'notCompleted') {
-            return tasksToSort.sort((a, b) => b.completed - a.completed);
+            sortedTasks = tasksToSort.filter(task => !task.completed).sort((a, b) => b.completed - a.completed);
         } else {
-            return tasksToSort;
+            sortedTasks = tasksToSort;
         }
+        return sortedTasks;
     };
 
     const searchTasks = (query) => {
@@ -171,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sortSelect.addEventListener('change', (event) => {
         const criteria = event.target.value;
-        const sortedTasks = sortTasks([...tasks], criteria);
+        const sortedTasks = sortTasks(tasks, criteria);
         displayTasks(sortedTasks);
     });
 
